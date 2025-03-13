@@ -393,10 +393,7 @@
    
 <script>
   // Define the questions
-  const questions = [
-    // Your 150 questions will go here
-    // You will copy them from your original file
-  const questions = [
+    const questions = [
   {
     id: 1,
     text: "מה נכון לגבי אפיתל העדשה באדם הבוגר?",
@@ -439,7 +436,9 @@
       'ג': "3",
       'ד': "4"
     },
-    image: "4-1.jpg",
+    multipleImages: true,
+    images: ["4-1.jpg", "4-2.jpg"],
+    imageLabels: ["1", "2"],
     correctAnswer: "ג"
   },
   {
@@ -1020,9 +1019,7 @@
       'ג': "הממצא ב-MRI מופיע לרוב לפני הממצא העיני.",
       'ד': "בדיקת ההדמיה המומלצת במקרים אלו היא דווקא CT כי היא מהירה יותר ומאבחנת טוב יותר חדירה של הגידול לעצמות הארובה."
     },
-    multipleImages: true,
-    images: ["56-1.jpg", "56-2.jpg"],
-    imageLabels: ["קרקעית עין שמאל", "MRI מוח"],
+    image: "56-1.jpg",
     correctAnswer: "א"
   },
   {
@@ -1139,9 +1136,7 @@
       'ג': "התפשטות לסינוס הקברנוזי.",
       'ד': "פזילה מילדות עם דהקומפנסציה."
     },
-    multipleImages: true,
-    images: ["66-1.jpg", "66-2.jpg"],
-    imageLabels: ["MRI 1", "MRI 2"],
+    image: "66-1.jpg",
     correctAnswer: "ג"
   },
   {
@@ -1164,7 +1159,9 @@
       'ג': "רטרקציה של העפעפיים עם לגופתלמוס.",
       'ד': "מאורעות אמבוליים מדופן העורק שנקרע."
     },
-    image: "68-1.jpg",
+    multipleImages: true,
+    images: ["68-1.jpg", "68-2.jpg"],
+    imageLabels: ["תמונה קלינית", "CT"],
     correctAnswer: "א"
   },
   {
@@ -1388,7 +1385,8 @@
   },
   {
     id: 88,
-    text: "לפניך קטע וידאו של מטופל. התופעה הנצפית קיימת גם בזמן שינה. מה מהבאים הכי סביר שיימצא בבדיקת MRI?",
+    text: "לפניך קטע וידאו של מטופל. התופעה הנצפית קיימת גם בזמן שינה. מה מהבאים הכי סביר שיימצא בבדיקת MRI? 
+	https://brain10.co.il/ti3/exam-media/fwewe4632-342.webm",
     options: {
       'א': "Ipsilateral Duplication of the facial nerve",
       'ב': "Cerebellar medulloblastoma",
@@ -1906,9 +1904,7 @@
       'ג': "בהתאם לפרוטוקול T אפליברספט תהיה מועילה יותר בשנה הראשונה, מכיוון שחדות הראיה שלו נמוכה מ-6/15.",
       'ד': "בהתאם לפרוטוקול U מומלץ לשקול שילוב של ריביזומאב ודקסמטזון על מנת להגיע לתוצאת ראיה מיטבית."
     },
-    multipleImages: true,
-    images: ["133-1.jpg", "133-2.jpg"],
-    imageLabels: ["קרקעית", "OCT"],
+    image: "133-1.jpg",
     correctAnswer: "ג"
   },
   {
@@ -1920,9 +1916,7 @@
       'ג': "טיפול טופיקלי.",
       'ד': "טיפול פומי בסטרואידים."
     },
-    multipleImages: true,
-    images: ["134-1.jpg", "134-2.jpg"],
-    imageLabels: ["צילום 1", "צילום 2"],
+    image: "134-1.jpg",
     correctAnswer: "ג"
   },
   {
@@ -2019,9 +2013,7 @@
       'ג': "לאחרונה התווסף לטיפול המומלץ גם Omega-3.",
       'ד': "לא מומלץ להציע לו טיפול כלשהו, מכיוון שאינו מתאים לקריטריוני הטיפול של המחקר."
     },
-    multipleImages: true,
-    images: ["142-1.jpg", "142-2.jpg"],
-    imageLabels: ["עין ימין", "עין שמאל"],
+    image: "142-1.jpg",
     correctAnswer: "ב"
   },
   {
