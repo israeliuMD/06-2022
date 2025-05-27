@@ -66,12 +66,13 @@
       border-color: #4a90e2;
     }
     
-    .main-content {
-      margin-right: 350px;
-      padding: 50px;
-      max-width: 800px;
-      margin-left: auto;
-    }
+.main-content {
+  margin-top: 60px;
+  margin-right: 350px;
+  padding: 50px;
+  max-width: 800px;
+  margin-left: auto;
+}
     .question-container {
       background-color: white;
       border-radius: 8px;
@@ -358,11 +359,18 @@
   <div class="main-content">
     <h1>בחינת מחלות עיניים - שלב א' מועד 06.2022</h1>
     
-    <div class="mode-toggle no-print">
-      <button id="exam-mode-btn" onclick="setMode('exam')" disabled>מצב בחינה</button>
-      <button id="study-mode-btn" onclick="setMode('study')">מצב למידה</button>
-      <button id="toggle-answers-btn" onclick="toggleAnswers()" style="display: none;">הצג תשובות</button>
-    </div>
+    <div class="control-panel no-print">
+  <button id="exam-mode-btn" onclick="setMode('exam')" disabled>מצב בחינה</button>
+  <button id="study-mode-btn" onclick="setMode('study')">מצב למידה</button>
+  <button id="save-exam-btn" onclick="saveExam()">שמור בחינה</button>
+  <button id="load-exam-btn" onclick="loadExam()">טען בחינה</button>
+  <button id="restart-exam-btn" onclick="restartExam()">התחל מחדש</button>
+  <button id="finish-btn" onclick="showResults()" class="finish-btn" style="display: none;">סיים בחינה</button>
+</div>
+
+<div class="mode-toggle no-print">
+  <button id="toggle-answers-btn" onclick="toggleAnswers()" style="display: none;">הצג תשובות</button>
+</div>
     
     <div id="score-display" style="display: none;" class="score-container">
       <div class="score-title">ציון</div>
@@ -2250,6 +2258,7 @@
       if (showingAnswers) return;
       
       selectedAnswers[questionId] = answer;
+	    autoSaveProgress();
       renderCurrentQuestion();
     }
     
@@ -2278,7 +2287,9 @@ function prevQuestion() {
 function resetShowingAnswers() {
   showingAnswers = false;
   const btn = document.getElementById('toggle-answers-btn');
+  const btnBottom = document.getElementById('toggle-answers-btn-bottom');
   if (btn) btn.textContent = 'הצג תשובות';
+  if (btnBottom) btnBottom.textContent = 'הצג תשובות';
   document.getElementById('score-display').style.display = 'none';
 }
     // Update navigation button states
@@ -2515,12 +2526,134 @@ function returnToExam(questionIndex = null) {
       renderCurrentQuestion();
       updateControls();
     }
+    // Auto-save to browser memory (happens automatically)
+function autoSaveProgress() {
+  const examData = {
+    currentQuestionIndex: currentQuestionIndex,
+    selectedAnswers: selectedAnswers,
+    timestamp: new Date().toISOString()
+  };
+  // CHANGE THIS: Replace 'EXAM-NAME' with your exam identifier
+  localStorage.setItem('examProgress-06-2022-auto', JSON.stringify(examData));
+}
+
+// Auto-load from browser memory when page loads
+function autoLoadProgress() {
+  // CHANGE THIS: Replace 'EXAM-NAME' with your exam identifier
+  const savedData = localStorage.getItem('examProgress-06-2022-auto');
+  if (savedData) {
+    try {
+      const examData = JSON.parse(savedData);
+      currentQuestionIndex = examData.currentQuestionIndex || 0;
+      selectedAnswers = examData.selectedAnswers || {};
+    } catch (e) {
+      // If there's an error, just start fresh
+    }
+  }
+}
+
+// Save exam progress as JSON file (manual save)
+function saveExam() {
+  const examData = {
+    currentQuestionIndex: currentQuestionIndex,
+    selectedAnswers: selectedAnswers,
+    timestamp: new Date().toISOString(),
+    // CHANGE THIS: Replace with your exam title
+    examTitle: "YOUR EXAM TITLE HERE"
+  };
+  
+  // Create and download JSON file
+  const dataStr = JSON.stringify(examData, null, 2);
+  const dataBlob = new Blob([dataStr], {type: 'application/json'});
+  
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(dataBlob);
+  // CHANGE THIS: Replace 'EXAM-NAME' with your exam identifier
+  link.download = 'exam-progress-EXAM-NAME.json';
+  link.click();
+  
+  // Show confirmation
+  const btn = document.getElementById('save-exam-btn');
+  const originalText = btn.textContent;
+  btn.textContent = 'נשמר!';
+  btn.style.backgroundColor = '#4caf50';
+  
+  setTimeout(() => {
+    btn.textContent = originalText;
+    btn.style.backgroundColor = '#4a90e2';
+  }, 2000);
+}
+
+// Load exam progress from JSON file
+function loadExam() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  
+  input.onchange = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
     
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const examData = JSON.parse(e.target.result);
+        
+        // Restore progress
+        currentQuestionIndex = examData.currentQuestionIndex || 0;
+        selectedAnswers = examData.selectedAnswers || {};
+        
+        // Update display
+        renderCurrentQuestion();
+        updateControls();
+        autoSaveProgress(); // Save to browser memory too
+        
+        // Show confirmation
+        const btn = document.getElementById('load-exam-btn');
+        const originalText = btn.textContent;
+        btn.textContent = 'נטען!';
+        btn.style.backgroundColor = '#4caf50';
+        
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.backgroundColor = '#4a90e2';
+        }, 2000);
+        
+      } catch (error) {
+        alert('שגיאה בקריאת קובץ הבחינה');
+      }
+    };
+    reader.readAsText(file);
+  };
+  
+  input.click();
+}
+
+// Restart exam
+function restartExam() {
+  if (confirm('האם אתה בטוח שברצונך להתחיל מחדש? כל התשובות יימחקו.')) {
+    currentQuestionIndex = 0;
+    selectedAnswers = {};
+    showingAnswers = false;
+    
+    // Reset UI
+    document.getElementById('toggle-answers-btn').textContent = 'הצג תשובות';
+    const btnBottom = document.getElementById('toggle-answers-btn-bottom');
+    if (btnBottom) btnBottom.textContent = 'הצג תשובות';
+    document.getElementById('score-display').style.display = 'none';
+    document.getElementById('results-container').style.display = 'none';
+    document.getElementById('question-container').style.display = 'block';
+    
+    renderCurrentQuestion();
+    updateControls();
+  }
+}
     // Initialize the app when the page loads
     window.onload = function() {
-      generateSidebarNavigation();
-      init();
-    }
+  autoLoadProgress(); // Load previous progress automatically
+  generateSidebarNavigation();
+  init();
+}
 	
 	// Add this code right before the closing +script+ tag in your HTML file
 
@@ -2843,6 +2976,26 @@ function createPrintableNotesPage() {
           cursor: pointer;
           font-size: 16px;
         }
+	.control-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border-bottom: 2px solid #ddd;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 200;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex-wrap: wrap;
+}
+
+.control-panel button {
+  padding: 6px 12px;
+  font-size: 0.9em;
+}
       </style>
     </head>
     <body>
