@@ -67,7 +67,7 @@
     }
     
 .main-content {
-  margin-top: 60px;
+  margin-top: 70px;
   margin-right: 350px;
   padding: 50px;
   max-width: 800px;
@@ -167,8 +167,9 @@
       margin-bottom: 10px;
     }
     .mode-toggle {
-      margin-bottom: 20px;
-    }
+  margin-bottom: 20px;
+  text-align: center;
+}
     .multiple-images-container {
       display: flex;
       justify-content: center;
@@ -349,6 +350,14 @@
   </style>
 </head>
 <body>
+	<div class="control-panel no-print">
+  <button id="exam-mode-btn" onclick="setMode('exam')" disabled>מצב בחינה</button>
+  <button id="study-mode-btn" onclick="setMode('study')">מצב למידה</button>
+  <button id="save-exam-btn" onclick="saveExam()">שמור בחינה</button>
+  <button id="load-exam-btn" onclick="loadExam()">טען בחינה</button>
+  <button id="restart-exam-btn" onclick="restartExam()">התחל מחדש</button>
+  <button id="finish-btn" onclick="showResults()" class="finish-btn" style="display: none;">סיים בחינה</button>
+</div>
   <div class="sidebar no-print" id="sidebar">
     <div class="sidebar-title">ניווט שאלות</div>
     <div class="question-nav" id="question-nav">
@@ -359,14 +368,7 @@
   <div class="main-content">
     <h1>בחינת מחלות עיניים - שלב א' מועד 06.2022</h1>
     
-    <div class="control-panel no-print">
-  <button id="exam-mode-btn" onclick="setMode('exam')" disabled>מצב בחינה</button>
-  <button id="study-mode-btn" onclick="setMode('study')">מצב למידה</button>
-  <button id="save-exam-btn" onclick="saveExam()">שמור בחינה</button>
-  <button id="load-exam-btn" onclick="loadExam()">טען בחינה</button>
-  <button id="restart-exam-btn" onclick="restartExam()">התחל מחדש</button>
-  <button id="finish-btn" onclick="showResults()" class="finish-btn" style="display: none;">סיים בחינה</button>
-</div>
+    
 
 <div class="mode-toggle no-print">
   <button id="toggle-answers-btn" onclick="toggleAnswers()" style="display: none;">הצג תשובות</button>
@@ -2981,7 +2983,7 @@ function createPrintableNotesPage() {
   top: 0;
   left: 0;
   right: 0;
-  background-color: #fff;
+  background-color: #f0f0f0;
   border-bottom: 2px solid #ddd;
   padding: 10px 20px;
   display: flex;
