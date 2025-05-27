@@ -2559,7 +2559,7 @@ function saveExam() {
     selectedAnswers: selectedAnswers,
     timestamp: new Date().toISOString(),
     // CHANGE THIS: Replace with your exam title
-    examTitle: "YOUR EXAM TITLE HERE"
+    examTitle: "06-2022"
   };
   
   // Create and download JSON file
@@ -2569,7 +2569,7 @@ function saveExam() {
   const link = document.createElement('a');
   link.href = URL.createObjectURL(dataBlob);
   // CHANGE THIS: Replace 'EXAM-NAME' with your exam identifier
-  link.download = 'exam-progress-EXAM-NAME.json';
+  link.download = 'exam-progress-06-2022.json';
   link.click();
   
   // Show confirmation
